@@ -7,18 +7,36 @@ import datetime
 
 from flask import Flask, render_template, request, redirect, url_for, make_response
 
+# import logging
+import sentry_sdk
+from sentry_sdk.integrations.flask import (
+    FlaskIntegration,
+)  # delete this if not using sentry.io
+
 # from markupsafe import escape
 import pymongo
 from pymongo.errors import ConnectionFailure
 from bson.objectid import ObjectId
 from dotenv import load_dotenv
 
+
 # load credentials and configuration options from .env file
 # if you do not yet have a file named .env, make one based on the template in env.example
 load_dotenv(override=True)  # take environment variables from .env.
 
+sentry_sdk.init(
+    dsn=os.getenv("SENTRY_DSN"),
+    # enable_tracing=True,
+    # Set traces_sample_rate to 1.0 to capture 100% of transactions for performance monitoring.
+    traces_sample_rate=1.0,
+    # Set profiles_sample_rate to 1.0 to profile 100% of sampled transactions.
+    # We recommend adjusting this value in production.
+    integrations=[FlaskIntegration()],
+    send_default_pii=True,
+)
+
+
 app = Flask(__name__)
-app.debug = True if os.getenv("FLASK_ENV", "development") == "development" else False
 
 
 # try to connect to the database, and quit if it doesn't work
@@ -33,7 +51,7 @@ except ConnectionFailure as e:
     # catch any database errors
     # the ping command failed, so the connection is not available.
     print(" * MongoDB connection error:", e)  # debug
-    # sentry_sdk.capture_exception(e)  # send the error to sentry.io. delete if not using
+    sentry_sdk.capture_exception(e)  # send the error to sentry.io. delete if not using
     sys.exit(1)  # this is a catastrophic error, so no reason to continue to live
 
 
