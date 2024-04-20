@@ -5,23 +5,7 @@ import sys
 import subprocess
 import datetime
 
-from flask import (
-    Flask,
-    render_template,
-    request,
-    redirect,
-    url_for,
-    make_response,
-    session,
-)
-from flask_login import (
-    LoginManager,
-    UserMixin,
-    login_user,
-    login_required,
-    logout_user,
-    current_user,
-)
+from flask import Flask, render_template, request, redirect, url_for, make_response
 
 # from markupsafe import escape
 import pymongo
@@ -29,23 +13,13 @@ from pymongo.errors import ConnectionFailure
 from bson.objectid import ObjectId
 from dotenv import load_dotenv
 
-import logging
-
-
-
 # load credentials and configuration options from .env file
 # if you do not yet have a file named .env, make one based on the template in env.example
 load_dotenv(override=True)  # take environment variables from .env.
 
-
-
-# instantiate the app using sentry for debugging
 app = Flask(__name__)
-bcrypt = Bcrypt(app)
-app.secret_key = os.getenv("SECRET_KEY")  # set the secret key for the app
+app.debug = True if os.getenv("FLASK_ENV", "development") == "development" else False
 
-# turn on debugging if in development mode
-#app.debug = True if os.getenv("FLASK_ENV", "development") == "development" else False
 
 # try to connect to the database, and quit if it doesn't work
 try:
@@ -111,11 +85,12 @@ def create_post():
         "title": title, 
         "artist": artist,
         "genre": genre,
-        "comments": comments, 
-        "created_at": datetime.datetime.utcnow()}
+        "comments": comments}
     db.exampleapp.insert_one(doc)  # insert a new document
 
-    return redirect(url_for("read"))  # tell the browser to make a request for the /read route
+    return redirect(
+        url_for("read")
+    )  # tell the browser to make a request for the /read route
 
 
 @app.route("/edit/<mongoid>")
@@ -152,8 +127,7 @@ def edit_post(mongoid):
         "title": title, 
         "artist": artist,
         "genre": genre,
-        "comments": comments, 
-        "created_at": datetime.datetime.utcnow(),
+        "comments": comments
     }
 
     db.exampleapp.update_one(
@@ -164,7 +138,7 @@ def edit_post(mongoid):
         url_for("read")
     )  # tell the browser to make a request for the /read route
 
-import logging
+
 
 @app.route("/delete/<mongoid>")
 def delete(mongoid):
