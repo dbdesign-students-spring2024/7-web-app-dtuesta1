@@ -1,32 +1,13 @@
-body {
-  font-family: 'Roboto', sans-serif; 
-  background-color: #f4f4f4;
-  color: #333;
-  line-height: 1.7; 
-  margin: 0;
-  padding: 0;
-}
-
 .container {
   border: 2px solid;
-  width: 90%;
-  max-width: 1200px;
-  margin: 25px auto;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); 
-  background: #fafafa;
-  padding: 20px;
-  border: 2px solid #ccc; 
+  width: 50%;
+  margin: 0 auto;
 }
 
-header, footer {
-  background: #DA70D6; 
-  color: #fafafa;
+header,
+footer,
+main {
   padding: 20px;
-  text-align: center;
-}
-
-header, main, footer {
-  padding: 15px; 
 }
 
 header,
@@ -35,28 +16,10 @@ main {
   margin-bottom: 5px;
 }
 
-main {
-  padding: 20px;
-  margin-bottom: 30px; 
-}
-
 p.post {
-  font-size: 15px;
-}
-
-nav a {
-  margin-right: 10px;
-  padding: 8px 16px;
-  background-color: #f0f0f0; 
-  border-radius: 8px;
-  transition: background-color 0.3s; 
-  color: #333; 
-  font-weight: 500;
-
-nav a:hover {
-  background-color: #dcdcdc; 
+  font-size: 12px;
 }
 
 footer {
-  margin-bottom: 15px;
+  margin-bottom: 5px;
 }
